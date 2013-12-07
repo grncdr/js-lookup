@@ -2,7 +2,9 @@
 
 [![browser support](https://ci.testling.com/grncdr/js-lookup.png)](https://ci.testling.com/grncdr/js-lookup)
 
-## module.exports = function makeReducer (hash=pluck("id"), onCollision="last")
+## API
+
+### module.exports = function makeReducer (hash=pluck("id"), onCollision="last")
 
 `lookupReducer` creates a reducing function (suitable for passing to 
 `Array.prototype.reduce` or [reducible](https://npm.im/reducible)) that builds a
@@ -24,17 +26,17 @@ seen for any given hash. The other options are "first", which retains the first
 value seen for a given key, and "concat" which handles collisions by creating an
 array containing every value seen for a given key.
 
-## makeReducer.reduce(arr, hash=pluck("id"), onCollision="last")
+### makeReducer.reduce(arr, hash=pluck("id"), onCollision="last")
 
 A short-hand way of writing `arr.reduce(makeReducer(hash, onCollision), {})`.
 
-## makeReducer.writableStream(hash=pluck("id"), onCollision="last", callback)
+### makeReducer.writableStream(hash=pluck("id"), onCollision="last", callback)
 
 Returns a writable stream that will use the reducer function to aggregate
 objects written to it into a single mapping. While the first two arguments are
 optional a callback must be provided. The callback will be called with the
 complete lookup table on the streams "end" event.
 
-# License
+## License
 
 BSD (2 clause)
