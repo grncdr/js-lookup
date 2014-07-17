@@ -64,5 +64,16 @@ var reducers = {
       }
       return mapping
     }
+  },
+
+  array: function (hash) {
+    return function arrayify (mapping, object) {
+      var key = hash(object);
+      if (!mapping.hasOwnProperty(key)) {
+        mapping[key] = [];
+      }
+      mapping[key].push(object);
+      return mapping;
+    }
   }
 }

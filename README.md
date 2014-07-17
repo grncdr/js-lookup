@@ -4,11 +4,9 @@
 
 ## API
 
-### module.exports = function makeReducer (hash=pluck("id"), onCollision="last")
+### module.exports = function lookup (hash=pluck("id"), onCollision="last")
 
-`lookupReducer` creates a reducing function (suitable for passing to 
-`Array.prototype.reduce` or [reducible](https://npm.im/reducible)) that builds a
-lookup table of objects based on the provided hash function:
+`lookup` creates a reducing function (suitable for passing to `Array.prototype.reduce` or [reducible](https://npm.im/reducible)) that builds a lookup table using the provided hash function. The function returned looks something like this:
 
 ```javascript
 function reducer (mapping, object) {
@@ -16,26 +14,33 @@ function reducer (mapping, object) {
   return mapping
 }
 ```
+#### Creating a lookup on a property.
 
-The `hash` parameter provided to `makeReducer` may also be a string, in which
-case it will be passed to [pluck](https://npm.im/pluck) to create a hash function.
+When the `hash` parameter is a string, the corresponding property name will be used as the hash value of each object. E.g. `lookup('name')` will return a hash function something like this:
 
-Different reducer implementations can be selected by the `onCollision` parameter
-provided to `lookupReducer`. The default shown above ("last") keeps the last value
-seen for any given hash. The other options are "first", which retains the first
-value seen for a given key, and "concat" which handles collisions by creating an
-array containing every value seen for a given key.
+```javascript
+function reducer (mapping, object) {
+  mapping[object['name']] = object
+  return mapping
+}
+```
 
-### makeReducer.reduce(arr, hash=pluck("id"), onCollision="last")
+#### Collision Handling
 
-A short-hand way of writing `arr.reduce(makeReducer(hash, onCollision), {})`.
+The second parameter to `lookup` determines what happens when two objects have the same hash value. There are currently 4 options:
 
-### makeReducer.writableStream(hash=pluck("id"), onCollision="last", callback)
+ - `'last'` - This is the default. If an object hashes to a key that is already used, the old value is overwritten.
+ - `'first'` - The opposite of `'last'`. If an object hashes to a key that is already used, the new value is discarded.
+ - `'array'` - Keep all values for each object in the order they appeared. The values in the final mapping will alway be arrays.
+ - `'concat'` - Keep all values for each object in the order they appeared. If a key was only seen once, it won't be wrapped in an array.
 
-Returns a writable stream that will use the reducer function to aggregate
-objects written to it into a single mapping. While the first two arguments are
-optional a callback must be provided. The callback will be called with the
-complete lookup table on the streams "end" event.
+### lookup.reduce(arr, hash=pluck("id"), onCollision="last")
+
+A short-hand way of writing `arr.reduce(lookup(hash, onCollision), {})`.
+
+### lookup.writableStream(hash=pluck("id"), onCollision="last", callback)
+
+Returns a writable stream that will use the reducer function to aggregate objects written to it into a single mapping. While the first two arguments are optional a callback must be provided. The callback will be called with the complete lookup table when the source stream ends.
 
 ## License
 
