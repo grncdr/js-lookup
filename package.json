@@ -1,6 +1,6 @@
 {
   "name": "lookup",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Transform a stream or array into a lookup object",
   "main": "index.js",
   "scripts": {
@@ -31,11 +31,22 @@
   "testling": {
     "files": "test.js",
     "browsers": {
-      "ie": [ 8, 9 ],
-      "firefox": [ 13 ],
-      "chrome": [ 20 ],
-      "safari": [ 5.1 ],
-      "opera": [ 12 ]
+      "ie": [
+        8,
+        9
+      ],
+      "firefox": [
+        13
+      ],
+      "chrome": [
+        20
+      ],
+      "safari": [
+        5.1
+      ],
+      "opera": [
+        12
+      ]
     }
   }
 }
